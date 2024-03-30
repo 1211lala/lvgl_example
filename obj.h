@@ -3,8 +3,12 @@
 
 #include "lvgl.h"
 
+#define loginfo     printf
 
-void obj_init(void);
 
+void obj_example(void);
+void style_general(void);
+void local_style(void);
+void amin(void);
 
 #endif
