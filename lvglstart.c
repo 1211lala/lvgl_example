@@ -1,6 +1,7 @@
-#include "lvglstart.h"
-#include "obj.h"
-#include "bar.h"
+#include "common.h"
+
+
+
 
 void lvgl_init(void)
 {

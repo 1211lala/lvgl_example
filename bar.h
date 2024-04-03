@@ -5,7 +5,6 @@
 #include "obj.h"
 
 
-void bar_example(void);
 
 
 #endif

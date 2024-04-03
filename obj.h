@@ -3,7 +3,6 @@
 
 #include "lvgl.h"
 
-#define loginfo     printf
 
 
 void obj_example(void);
