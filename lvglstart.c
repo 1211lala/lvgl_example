@@ -3,5 +3,5 @@
 
 void lvgl_init(void)
 {
-     keyboard_example();
+     connect_wifi();
 }
