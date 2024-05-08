@@ -75,6 +75,7 @@ void create_keyboard(void)
     /* 设置 LV_PART_ITEMS 部分背景颜色 */
     lv_obj_set_style_bg_color(keyboard, lv_palette_main(LV_PALETTE_RED),LV_PART_ITEMS | LV_STATE_DEFAULT);
 
+
     lv_obj_add_event_cb(keyboard, keyboard_event_cb,LV_EVENT_VALUE_CHANGED, NULL);
 
 
@@ -88,6 +89,7 @@ void create_keyboard(void)
     lv_textarea_set_one_line(namearea, true);
     lv_obj_set_style_text_font(namearea, &lv_font_montserrat_30 , LV_STATE_DEFAULT);
     lv_obj_set_style_text_color(namearea,  lv_color_hex(0xff0000), LV_STATE_DEFAULT);
+
     /* 设置提示语 */
     lv_obj_set_style_bg_color(namearea, lv_color_hex(0x1b1b1b), LV_STATE_DEFAULT);
     lv_textarea_set_placeholder_text(namearea, "Enter Wifi Ssid");
