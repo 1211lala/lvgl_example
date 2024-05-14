@@ -1,7 +1,209 @@
-#include "common.h"
-#include "menuslider.h"
-void lvgl_init(void)
+#include "lvglstart.h"
+#include "stdio.h"
+#include "lvgl_obj.h"
+#include "lvgl_bar.h"
+#include "lvgl_arc.h"
+
+
+#define OBJ_H 250
+#define OBJ_W 250
+
+#define JIANGE OBJ_W  +  50
+#define objNum 7
+
+lv_obj_t *bgObj;
+lv_obj_t * tile;
+lv_obj_t * tile0;
+lv_timer_t *t1;
+int move = 0;
+
+
+lv_obj_t *obj[objNum];
+lv_obj_t *label[objNum];
+char * label_str[objNum] = {"OBJ", "BAR", "ARC", "NULL", "NULL", "NULL", "NULL"};
+uint32_t color[objNum] = {0xff0020, 0xff00ff, 0x0000ff, 0x00ffff, 0x00ff00,0xffff00, 0x000000};
+
+void menu_slider(void)
 {
-   menu_slider();
-//    menuslider();
+    bgObj= lv_scr_act();
+    lv_obj_clear_flag(bgObj, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_style_bg_color(lv_scr_act(),lv_color_hex(0x8f8f8f), LV_PART_MAIN|LV_STATE_DEFAULT);
+
+    tile= lv_tileview_create(bgObj);
+    lv_obj_set_style_bg_color(tile,lv_color_hex(0x000000), LV_PART_MAIN|LV_STATE_DEFAULT);
+
+    tile0= lv_tileview_add_tile(tile, 0, 0, LV_DIR_VER);
+    lv_obj_set_style_bg_color(tile0,lv_color_hex(0x000000), LV_PART_MAIN|LV_STATE_DEFAULT);
+
+    for(uint16_t i = 0; i< objNum; i++)
+    {
+        if(objNum == i+1)
+        {
+            obj[i] = lv_obj_create(tile0);
+            lv_obj_align(obj[i],LV_ALIGN_CENTER, i * 200 + 100, -50);
+            lv_obj_set_size(obj[i], 80, 80);
+            lv_obj_set_style_bg_color(obj[i],lv_color_hex(0x000000), LV_PART_MAIN);
+            lv_obj_set_style_border_width(obj[i], 0, LV_STATE_DEFAULT);
+
+        }
+        else
+        {
+            obj[i] = lv_btn_create(tile0);
+            lv_obj_set_style_radius(obj[i],20,LV_PART_MAIN);
+            lv_obj_align(obj[i],LV_ALIGN_CENTER, i * 200, -50);
+            lv_obj_set_style_bg_color(obj[i],lv_color_hex(color[i]), LV_PART_MAIN);
+            lv_obj_set_size(obj[i], 100, 100);
+            lv_obj_add_event_cb(obj[i], obj_event_cb, LV_EVENT_LONG_PRESSED, NULL);
+            label[i] = lv_label_create(obj[i]);
+            lv_label_set_text_fmt(label[i], "%s", label_str[i]);
+            lv_obj_set_style_text_color(label[i], lv_color_hex(0xffffffff), LV_STATE_DEFAULT);
+            lv_obj_set_style_text_font(label[i], &lv_font_montserrat_16, LV_STATE_DEFAULT);
+            lv_obj_set_align(label[i], LV_ALIGN_CENTER);
+        }
+    }
+
+    // lv_obj_add_event_cb(tile0,scroll_event_cb,LV_EVENT_SCROLL_END, NULL);
+
+    // t1=lv_timer_create(timer_cb1,10, NULL);
 }
+
+
+void obj_event_cb(lv_event_t *e)
+{
+    lv_obj_t *target = lv_event_get_target(e);
+    lv_event_code_t  code = lv_event_get_code(e);
+    if(target == obj[0])
+    {
+        lv_obj_add_flag(tile, LV_OBJ_FLAG_HIDDEN);
+        obj_example();
+    }
+    if(target == obj[1])
+    {
+        lv_obj_add_flag(tile, LV_OBJ_FLAG_HIDDEN);
+        example_bar();
+    }
+    if(target == obj[2])
+    {
+        lv_obj_add_flag(tile, LV_OBJ_FLAG_HIDDEN);
+        arc_example();
+    }
+    if(target == obj[3])
+    {
+        printf("obj4 long pressing \r\n");
+    }
+    if(target == obj[4])
+    {
+        printf("obj5 long pressing \r\n");
+    }
+    if(target == obj[5])
+    {
+        printf("obj6 long pressing \r\n");
+    }
+}
+
+
+
+
+void scroll_event_cb(lv_event_t * e)
+{
+    move=lv_obj_get_scroll_x(tile0);
+
+    if(move%150!=0)
+    {
+        if(move%150<75)
+        {
+            lv_obj_scroll_to_x(tile0, move-(move%150), LV_ANIM_ON);
+        }
+        if(move%150>74)
+        {
+            lv_obj_scroll_to_x(tile0, move+150-(move%150), LV_ANIM_ON);
+        }
+    }
+}
+
+
+
+void timer_cb1(lv_timer_t * t)
+{
+    int move;
+    move=lv_obj_get_scroll_x(tile0);
+    if(move<=150&&move>=0)
+    {
+        lv_obj_set_width(obj[0],130-move/3);
+        lv_obj_set_height(obj[0],130-move/3);
+        lv_obj_set_y(obj[0],-move/3);
+
+        lv_obj_set_width(obj[1],80+move/3);
+        lv_obj_set_height(obj[1],80+move/3);
+        lv_obj_set_y(obj[1],move/3-50);
+    }
+
+    if(move<=300&&move>=150)
+    {
+        lv_obj_set_width(obj[1],130-(move-150)/3);
+        lv_obj_set_height(obj[1],130-(move-150)/3);
+        lv_obj_set_y(obj[1],-(move-150)/3);
+
+        lv_obj_set_width(obj[2],80+(move-150)/3);
+        lv_obj_set_height(obj[2],80+(move-150)/3);
+        lv_obj_set_y(obj[2],(move-150)/3-50);
+    }
+
+    if(move<=450&&move>=300)
+    {
+        lv_obj_set_width(obj[2],130-(move-300)/3);
+        lv_obj_set_height(obj[2],130-(move-300)/3);
+        lv_obj_set_y(obj[2],-(move-300)/3);
+
+        lv_obj_set_width(obj[3],80+(move-300)/3);
+        lv_obj_set_height(obj[3],80+(move-300)/3);
+        lv_obj_set_y(obj[3],(move-300)/3-50);
+    }
+
+    if(move<=600&&move>=450)
+    {
+        lv_obj_set_width(obj[3],130-(move-450)/3);
+        lv_obj_set_height(obj[3],130-(move-450)/3);
+        lv_obj_set_y(obj[3],-(move-450)/3);
+
+        lv_obj_set_width(obj[4],80+(move-450)/3);
+        lv_obj_set_height(obj[4],80+(move-450)/3);
+        lv_obj_set_y(obj[4],(move-450)/3-50);
+    }
+
+    if(move<=750&&move>=600)
+    {
+        lv_obj_set_width(obj[4],130-(move-600)/3);
+        lv_obj_set_height(obj[4],130-(move-600)/3);
+        lv_obj_set_y(obj[4],-(move-600)/3);
+
+        lv_obj_set_width(obj[5],80+(move-600)/3);
+        lv_obj_set_height(obj[5],80+(move-600)/3);
+        lv_obj_set_y(obj[5],(move-600)/3-50);
+    }
+
+    if(move<=900&&move>=750)
+    {
+        lv_obj_set_width(obj[5],130-(move-750)/3);
+        lv_obj_set_height(obj[5],130-(move-750)/3);
+        lv_obj_set_y(obj[5],-(move-750)/3);
+
+        lv_obj_set_width(obj[6],80+(move-750)/3);
+        lv_obj_set_height(obj[6],80+(move-750)/3);
+        lv_obj_set_y(obj[6],(move-750)/3-50);
+    }
+
+    if(move<=1050&&move>=900)
+    {
+        lv_obj_set_width(obj[6],130-(move-900)/3);
+        lv_obj_set_height(obj[6],130-(move-900)/3);
+        lv_obj_set_y(obj[6],-(move-900)/3);
+    }
+}
+
+
+
+
+
+
+
