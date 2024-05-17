@@ -4,8 +4,6 @@
 
 #include "lvgl.h"
 
-#define loginfo printf
-
 #define LCD_W 480
 #define LCD_H 480
 
@@ -21,22 +19,7 @@
 #define LCD_LIGHT_GRAY 0xC0C0C0 // 浅灰色
 #define LCD_DARK_GRAY 0x404040  // 深灰色
 
-extern lv_obj_t *bgObj;
-
-extern lv_obj_t *tile;
-
-extern lv_obj_t *tile0;
-extern lv_obj_t *tile1;
-
-extern lv_timer_t *t1;
-
-extern lv_obj_t *obj[];
-extern lv_obj_t *lable[];
-extern uint32_t color[];
-
-void menu_slider(void);
-void scroll_event_cb(lv_event_t *e);
-void obj_event_cb(lv_event_t *e);
-void timer_cb1(lv_timer_t *t);
-
+void menu_demo(void);
+void timer_cb(lv_timer_t * t);
+void switch_event_cb(lv_event_t *e);
 #endif
