@@ -14,13 +14,14 @@
 lv_obj_t *bgObj;
 lv_obj_t * tile;
 lv_obj_t * tile0;
+lv_obj_t * tile1;
 lv_timer_t *t1;
 int move = 0;
 
 
 lv_obj_t *obj[objNum];
 lv_obj_t *label[objNum];
-char * label_str[objNum] = {"OBJ", "BAR", "ARC", "NULL", "NULL", "NULL", "NULL"};
+char * label_str[objNum] = {"BTN", "BAR", "ARC", "NULL", "NULL", "NULL", "NULL"};
 uint32_t color[objNum] = {0xff0020, 0xff00ff, 0x0000ff, 0x00ffff, 0x00ff00,0xffff00, 0x000000};
 
 void menu_slider(void)
@@ -34,13 +35,12 @@ void menu_slider(void)
 
     tile0= lv_tileview_add_tile(tile, 0, 0, LV_DIR_VER);
     lv_obj_set_style_bg_color(tile0,lv_color_hex(0x000000), LV_PART_MAIN|LV_STATE_DEFAULT);
-
     for(uint16_t i = 0; i< objNum; i++)
     {
         if(objNum == i+1)
         {
             obj[i] = lv_obj_create(tile0);
-            lv_obj_align(obj[i],LV_ALIGN_CENTER, i * 200 + 100, -50);
+            lv_obj_align(obj[i],LV_ALIGN_CENTER, i * 250 , -50);
             lv_obj_set_size(obj[i], 80, 80);
             lv_obj_set_style_bg_color(obj[i],lv_color_hex(0x000000), LV_PART_MAIN);
             lv_obj_set_style_border_width(obj[i], 0, LV_STATE_DEFAULT);
@@ -50,9 +50,9 @@ void menu_slider(void)
         {
             obj[i] = lv_btn_create(tile0);
             lv_obj_set_style_radius(obj[i],20,LV_PART_MAIN);
-            lv_obj_align(obj[i],LV_ALIGN_CENTER, i * 200, -50);
+            lv_obj_align(obj[i],LV_ALIGN_CENTER, i * 250, -50);
             lv_obj_set_style_bg_color(obj[i],lv_color_hex(color[i]), LV_PART_MAIN);
-            lv_obj_set_size(obj[i], 100, 100);
+            lv_obj_set_size(obj[i], 120, 120);
             lv_obj_add_event_cb(obj[i], obj_event_cb, LV_EVENT_LONG_PRESSED, NULL);
             label[i] = lv_label_create(obj[i]);
             lv_label_set_text_fmt(label[i], "%s", label_str[i]);
@@ -61,10 +61,44 @@ void menu_slider(void)
             lv_obj_set_align(label[i], LV_ALIGN_CENTER);
         }
     }
-
     // lv_obj_add_event_cb(tile0,scroll_event_cb,LV_EVENT_SCROLL_END, NULL);
-
     // t1=lv_timer_create(timer_cb1,10, NULL);
+
+    tile1= lv_tileview_add_tile(tile, 0, 1, LV_DIR_VER);
+    lv_obj_set_style_bg_color(tile0,lv_color_hex(0x000000), LV_PART_MAIN|LV_STATE_DEFAULT);
+
+
+
+
+    lv_obj_t *timeObj =  lv_obj_create(tile1);
+    lv_obj_set_size(timeObj, 320, 320);
+    lv_obj_align(timeObj, LV_ALIGN_BOTTOM_LEFT, 20, -20);
+    lv_obj_set_style_bg_color(timeObj, lv_color_hex(0xff0000), LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(timeObj, 0, LV_STATE_DEFAULT);
+
+    lv_obj_t *wifiObj = lv_obj_create(tile1);
+    lv_obj_align_to(wifiObj, timeObj, LV_ALIGN_OUT_TOP_MID, 20, 20);
+    lv_obj_align(wifiObj, LV_ALIGN_TOP_LEFT, 20 ,20 );
+    lv_obj_set_size(wifiObj, 300, 100);
+    lv_obj_set_style_bg_color(wifiObj, lv_color_hex(0x0ff000), LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(wifiObj, 0, LV_STATE_DEFAULT);
+
+    lv_obj_t *wifi_label = lv_label_create(wifiObj);
+    lv_label_set_text_fmt(wifi_label, "WIFI: %s\n\n  IP : %s", "Kean.2023", "192.168.8.22");
+    lv_obj_set_style_text_font(wifi_label, &lv_font_montserrat_18, LV_STATE_DEFAULT);
+    lv_obj_align(wifi_label, LV_ALIGN_CENTER, 0 ,0 );
+
+    lv_obj_t *sramObj = lv_obj_create(tile1);
+    lv_obj_align_to(sramObj,timeObj, LV_ALIGN_OUT_RIGHT_TOP, 5, -(20 + 100));
+    lv_obj_set_size(sramObj, 120, 120);
+    lv_obj_set_style_bg_color(sramObj, lv_color_hex(0x00FF00), LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(sramObj, 0, LV_STATE_DEFAULT);
+
+    lv_obj_t *pramObj = lv_obj_create(tile1);
+    lv_obj_set_size(pramObj, 120, 120);
+    lv_obj_align_to(pramObj, timeObj, LV_ALIGN_OUT_RIGHT_TOP, 5, 20);
+    lv_obj_set_style_bg_color(pramObj, lv_color_hex(0x000FF0), LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(pramObj, 0, LV_STATE_DEFAULT);
 }
 
 

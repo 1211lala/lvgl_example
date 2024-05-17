@@ -26,6 +26,7 @@ extern lv_obj_t *bgObj;
 extern lv_obj_t *tile;
 
 extern lv_obj_t *tile0;
+extern lv_obj_t *tile1;
 
 extern lv_timer_t *t1;
 
